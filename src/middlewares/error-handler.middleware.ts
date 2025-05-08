@@ -1,5 +1,5 @@
 import { ErrorMessages } from "@/constants";
-import { sendErrorResponse } from "@/utils";
+import { LoggerUtl, sendErrorResponse } from "@/utils";
 import { NextFunction, Request, Response } from "express";
 
 const ErrorHandler = (
@@ -8,7 +8,7 @@ const ErrorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
-  console.log("object");
+  LoggerUtl.logToConsole(err);
   sendErrorResponse(res, ErrorMessages.INTERNAL_SERVER_ERROR, err);
 };
 

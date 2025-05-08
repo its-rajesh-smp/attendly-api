@@ -1,3 +1,5 @@
+import { LoggerUtl } from ".";
+
 /**
  * Retrieves an environment variable by its key.
  *
