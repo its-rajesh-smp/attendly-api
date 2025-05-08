@@ -10,7 +10,7 @@
     "dev": "nodemon src/config/index.ts",
     "build": "tsc",
     "start": "NODE_ENV=development node dist/index.js",
-    "start:prod": "pm2 start dist/index.js --name attendly-api --env development",
+    "start:prod": "pm2 start dist/index.js --name attendly-api --env production",
     "prisma:migrate": "dotenv -e .env.dev -- npx prisma migrate dev",
     "prisma:migrate:prod": "dotenv -e .env.prod -- npx prisma migrate dev",
     "prisma:generate": "dotenv -e env.dev -- npx prisma generate",
