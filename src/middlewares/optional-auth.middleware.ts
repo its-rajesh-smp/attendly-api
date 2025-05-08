@@ -1,6 +1,7 @@
+import { ErrorMessages } from "@/constants";
 import { UserService } from "@/services";
 import { DecodedUserJWT } from "@/types/others.type";
-import { JWTUtil, ResponseUtil } from "@/utils";
+import { JWTUtil, sendErrorResponse } from "@/utils";
 import { NextFunction, Request, Response } from "express";
 
 export const OptionalAuthMiddleware = async (
@@ -20,7 +21,7 @@ export const OptionalAuthMiddleware = async (
         const user = await UserService.findOne({ id });
 
         if (!user) {
-          return ResponseUtil.sendErrorResponse(res, "UNAUTHORIZED");
+          return sendErrorResponse(res, ErrorMessages.UNAUTHORIZED);
         }
 
         if (user) {
@@ -31,7 +32,7 @@ export const OptionalAuthMiddleware = async (
           };
         }
       } catch (error) {
-        return ResponseUtil.sendErrorResponse(res, "UNAUTHORIZED");
+        return sendErrorResponse(res, ErrorMessages.UNAUTHORIZED);
       }
     }
   }

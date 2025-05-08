@@ -1,19 +1,19 @@
+import { HttpStatus } from "@/constants";
 import { EventDTO } from "@/dtos";
 import { EventService } from "@/services";
-import { ResponseUtil } from "@/utils";
+import { sendResponse } from "@/utils";
 import { Request, Response } from "express";
 
 /**
- * Retrieves all events. If the request is authenticated, also includes the
- * events which the user has RSVP'd to.
- *
- * @param {Request} req The ExpressJS request object.
- * @param {Response} res The ExpressJS response object.
- * @returns {Promise<void>}
+ * Retrieves all events, including whether the current user has RSVP'd to each event.
+ * @param {Request} req - The ExpressJS request object.
+ * @param {Response} res - The ExpressJS response object.
+ * @returns {Promise<void>} - A promise that resolves to sending the events in the response.
  */
 const getAllEvents = async (req: Request, res: Response) => {
   const currentUser = req?.user;
 
+  // Include option to filter events by the current user if they are logged in
   const includeOptions = currentUser?.id
     ? {
         EventRsvps: {
@@ -28,6 +28,7 @@ const getAllEvents = async (req: Request, res: Response) => {
     include: includeOptions,
   });
 
+  // Add isRsvpToEvent property to each event
   const eventsWithRsvpStatus = events.map((event: any) => {
     const isRsvpToEvent = event?.EventRsvps?.length > 0;
     delete event?.EventRsvps;
@@ -37,14 +38,13 @@ const getAllEvents = async (req: Request, res: Response) => {
     };
   });
 
-  return ResponseUtil.sendResponse(res, "SUCCESS", eventsWithRsvpStatus);
+  return sendResponse(res, HttpStatus.OK, eventsWithRsvpStatus);
 };
 
 /**
- * Creates a new event with the provided details and returns the created event.
- *
- * @param {Request} req - The ExpressJS request object, containing the event details in the body and user information.
- * @param {Response} res - The ExpressJS response object.
+ * Creates a new event with the provided data and assigns the current user as the creator.
+ * @param {Request} req - The ExpressJS request object containing the event data in the body.
+ * @param {Response} res - The ExpressJS response object used to send the created event.
  * @returns {Promise<void>} - A promise that resolves to sending the created event in the response.
  */
 const createAnEvent = async (req: Request, res: Response) => {
@@ -56,7 +56,7 @@ const createAnEvent = async (req: Request, res: Response) => {
     creatorId: id,
   });
 
-  return ResponseUtil.sendResponse(res, "CREATED", event);
+  return sendResponse(res, HttpStatus, event);
 };
 
 export default { getAllEvents, createAnEvent };

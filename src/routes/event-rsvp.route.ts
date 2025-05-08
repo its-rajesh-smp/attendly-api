@@ -1,6 +1,6 @@
 import { EventRsvpController } from "@/controllers";
+import { AuthMiddleware } from "@/middlewares";
 import express from "express";
-import { AuthMiddleware } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 

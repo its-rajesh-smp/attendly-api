@@ -2,6 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import limiter from "./config/rate-limiter.conf";
+import ErrorHandler from "./middlewares/error-handler.middleware";
 import router from "./routes";
 import { EnvUtil } from "./utils";
 
@@ -13,14 +14,17 @@ dotenv.config({
 export const app = express();
 
 /* Middlewares */
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*" })); // TODO: Set the origin
 app.use(limiter);
 app.use(express.json());
 
 /* Routes */
 app.use("/api", router);
 
-/* Start Server */
+/* Global Error Handler */
+app.use(ErrorHandler);
+
+/* Starting Server */
 const port = parseInt(EnvUtil.getEnv("PORT"));
 
 app.listen(port, async () => {

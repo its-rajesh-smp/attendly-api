@@ -1,6 +1,7 @@
+import { ErrorMessages } from "@/constants";
 import { UserService } from "@/services";
 import { DecodedUserJWT } from "@/types/others.type";
-import { JWTUtil, ResponseUtil } from "@/utils";
+import { JWTUtil, sendErrorResponse } from "@/utils";
 import { NextFunction, Request, Response } from "express";
 
 export const AuthMiddleware = async (
@@ -10,9 +11,11 @@ export const AuthMiddleware = async (
 ) => {
   const authHeader = req.headers["authorization"];
   if (!authHeader) {
-    return ResponseUtil.sendErrorResponse(res, "UNAUTHORIZED");
+    return sendErrorResponse(res, ErrorMessages.UNAUTHORIZED);
   }
+
   const token = authHeader.split(" ")[1];
+
   try {
     const decoded = JWTUtil.verifyJWTToken(token);
     const { email, id } = decoded as DecodedUserJWT;
@@ -20,7 +23,7 @@ export const AuthMiddleware = async (
     const user = await UserService.findOne({ id });
 
     if (!user) {
-      return ResponseUtil.sendErrorResponse(res, "UNAUTHORIZED");
+      return sendErrorResponse(res, ErrorMessages.USER_NOT_FOUND);
     }
 
     req.user = {
@@ -31,8 +34,6 @@ export const AuthMiddleware = async (
 
     next();
   } catch (error) {
-    return ResponseUtil.sendErrorResponse(res, "UNAUTHORIZED");
+    return sendErrorResponse(res, ErrorMessages.UNAUTHORIZED);
   }
 };
-
-export default { AuthMiddleware };
