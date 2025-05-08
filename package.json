@@ -9,8 +9,9 @@
   "scripts": {
     "dev": "nodemon src/config/index.ts",
     "build": "tsc",
-    "start": "NODE_ENV=development node dist/index.js",
-    "start:prod": "pm2 start dist/index.js --name attendly-api --env production",
+    "start": "NODE_ENV=production node dist/index.js",
+    "start:prod": "NODE_ENV=production pm2 start dist/index.js --name attendly-api",
+    "restart:prod": "NODE_ENV=production pm2 restart attendly-api || pm2 start dist/index.js --name attendly-api",
     "prisma:migrate": "dotenv -e .env.dev -- npx prisma migrate dev",
     "prisma:migrate:prod": "dotenv -e .env.prod -- npx prisma migrate dev",
     "prisma:generate": "dotenv -e env.dev -- npx prisma generate",

@@ -13,6 +13,8 @@ dotenv.config({
 });
 
 export const app = express();
+/* Trust Proxy */
+app.set("trust proxy", true); // Trust proxy headers for IP address resolution
 
 /* Middlewares */
 app.use(cors({ origin: "*" })); // TODO: Set the origin
