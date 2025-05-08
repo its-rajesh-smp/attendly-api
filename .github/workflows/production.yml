@@ -26,13 +26,13 @@ jobs:
         run: npm install
 
       - name: Run migration
-        run: npm run prisma:migrate:prod
+        run: sudo npm run prisma:migrate:prod
 
       - name: Run migration generate
-        run: npm run prisma:generate:prod
+        run: sudo npm run prisma:generate:prod
 
       - name: Build project
-        run: npm run build
+        run: sudo npm run build
 
       - name: Restart pm2
         run: npm run pm2:restart
