@@ -13,7 +13,36 @@ import { Request, Response } from "express";
 const getAllEvents = async (req: Request, res: Response) => {
   const currentUser = req?.user;
 
-  // Include option to filter events by the current user if they are logged in
+  // Pagination
+  const page = parseInt(req.query?.page as string) || 1;
+  const limit = parseInt(req.query?.limit as string) || 10;
+  const isRsvpToEvent = req.query?.isRsvpToEvent;
+
+  const where: any = {};
+
+  // if the user is not logged in then only checking for isRsvpToEvent
+  if (!currentUser && isRsvpToEvent) {
+    return sendResponse(res, HttpStatus.OK, {
+      pagination: {
+        page,
+        limit,
+        totalCount: 0,
+        totalPages: 0,
+      },
+      events: [],
+    });
+  }
+
+  // if the user is logged in then only checking for isRsvpToEvent
+  if (currentUser && isRsvpToEvent) {
+    where.EventRsvps = {
+      some: {
+        userId: currentUser?.id,
+      },
+    };
+  }
+
+  // If the user is logged in, include their RSVPs
   const includeOptions = currentUser?.id
     ? {
         EventRsvps: {
@@ -24,12 +53,18 @@ const getAllEvents = async (req: Request, res: Response) => {
       }
     : {};
 
-  const events = await EventService.findAll({
-    include: includeOptions,
+  // Getting the paginated data
+  const response = await EventService.findPaginated({
+    condition: where,
+    limit,
+    page,
+    options: {
+      include: includeOptions,
+    },
   });
 
   // Add isRsvpToEvent property to each event
-  const eventsWithRsvpStatus = events.map((event: any) => {
+  const eventsWithRsvpStatus = response.events.map((event: any) => {
     const isRsvpToEvent = event?.EventRsvps?.length > 0;
     delete event?.EventRsvps;
     return {
@@ -38,7 +73,10 @@ const getAllEvents = async (req: Request, res: Response) => {
     };
   });
 
-  return sendResponse(res, HttpStatus.OK, eventsWithRsvpStatus);
+  return sendResponse(res, HttpStatus.OK, {
+    ...response,
+    events: eventsWithRsvpStatus,
+  });
 };
 
 /**
@@ -56,7 +94,7 @@ const createAnEvent = async (req: Request, res: Response) => {
     creatorId: id,
   });
 
-  return sendResponse(res, HttpStatus, event);
+  return sendResponse(res, HttpStatus.CREATED, event);
 };
 
 export default { getAllEvents, createAnEvent };
