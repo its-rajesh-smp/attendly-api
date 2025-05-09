@@ -6,11 +6,14 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist", // Output directory for compiled files
-    "baseUrl": ".", // Allow @ imports
+    "outDir": "./dist",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "sourceMap": true
   },
   "include": ["./src/**/*", "./api/*.ts", "index.ts"],
   "exclude": ["node_modules"],
