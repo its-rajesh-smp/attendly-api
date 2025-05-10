@@ -45,7 +45,7 @@ const unRsvpFromEvent = async (req: Request, res: Response) => {
   });
 
   if (!isDeleted) {
-    return sendErrorResponse(res, ErrorMessages.BAD_REQUEST);
+    return sendErrorResponse(res, ErrorMessages.HAVENT_RSVPED);
   }
 
   return sendResponse(res, HttpStatus.OK, true);

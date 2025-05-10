@@ -11,6 +11,7 @@ export const HttpStatus = {
   INVALID_PASSWORD: 401,
   VALIDATION_ERROR: 400,
   ALREADY_RSVPED: 400,
+  HAVENT_RSVPED: 400,
 } as const;
 
 export const ErrorMessages = {
@@ -26,6 +27,7 @@ export const ErrorMessages = {
   INVALID_PASSWORD: "Invalid password",
   VALIDATION_ERROR: "Validation error",
   ALREADY_RSVPED: "Already RSVPed",
+  HAVENT_RSVPED: "Haven't RSVPed",
 } as const;
 
 export const ErrorMessagesToKeyMap: { [key: string]: string } = Object.entries(
