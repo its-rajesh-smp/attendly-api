@@ -1,4 +1,4 @@
-# Event Management API
+# Attendly API
 
 A RESTful API for event management with user authentication, event creation, and RSVP functionality built with Node.js, Express, and Prisma.
 
