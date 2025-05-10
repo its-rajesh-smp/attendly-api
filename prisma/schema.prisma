@@ -41,5 +41,5 @@ model EventRsvp {
   joinedAt DateTime @default(now())
 
   users  User  @relation(fields: [userId], references: [id])
-  events Event @relation(fields: [eventId], references: [id])
+  events Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
