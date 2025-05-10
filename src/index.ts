@@ -29,5 +29,5 @@ app.use(ErrorHandler);
 const port = EnvUtil.getEnv("PORT") || 3000;
 
 app.listen(port, async () => {
-  console.log(`🚀 serv er started on ${port} ✔️`);
+  console.log(`🚀 Server started on ${port}`);
 });
